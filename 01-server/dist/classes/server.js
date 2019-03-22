@@ -15,6 +15,9 @@ class Server {
         this.io = socket_io_1.default(this.httpServer);
         this.listenSockets();
     }
+    static get instance() {
+        return this._instance || (this._instance = new this());
+    }
     start(callback) {
         this.httpServer.listen(this.port, callback);
     }

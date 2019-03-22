@@ -7,7 +7,7 @@ const server_1 = __importDefault(require("./classes/server"));
 const router_1 = __importDefault(require("./routes/router"));
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const server = new server_1.default();
+const server = server_1.default.instance;
 server.app.use(bodyParser.urlencoded({ extended: true }));
 server.app.use(bodyParser.json());
 server.app.use(cors({ origin: true, credentials: true }));

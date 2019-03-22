@@ -1,14 +1,15 @@
 import express from 'express';
 import { SERVER_PORT } from '../globals/environment';
-import socket from 'socket.io';
+import socketIO from 'socket.io';
 import http from 'http';
+import * as socket from '../sockets/socket';
 
 export default class Server{
     private static _instance: Server;
 
     public app: express.Application;
     public port: number;
-    public io: socket.Server;
+    public io: socketIO.Server;
     private httpServer: http.Server;    
 
     private constructor() {
@@ -16,7 +17,7 @@ export default class Server{
         this.port = SERVER_PORT;
 
         this.httpServer = new http.Server(this.app);
-        this.io = socket(this.httpServer);
+        this.io = socketIO(this.httpServer);
 
         this.listenSockets();
     }
@@ -34,7 +35,8 @@ export default class Server{
 
         this.io.on('connection', client => {
             console.log('Client connected');
+
+            socket.disconnect(client);
         });
     }
-
 }

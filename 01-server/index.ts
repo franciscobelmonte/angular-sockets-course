@@ -1,3 +1,7 @@
-const fullname = 'Francisco Belmonte';
+import Server from "./classes/server";
 
-console.log(`My name is ${fullname}`);
+const server = new Server();
+
+server.start(() => {
+    console.log(`Server running in ${server.port}`);
+})

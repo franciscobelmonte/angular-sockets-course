@@ -13,11 +13,13 @@ router.get('/messages', (req, res) => {
     });
 });
 router.post('/messages', (req, res) => {
-    const body = req.body.body;
+    const message = req.body.message;
     const from = req.body.from;
+    const server = server_1.default.instance;
+    server.io.emit('new-message', { from, message });
     res.json({
         error: false,
-        body,
+        message,
         from
     });
 });

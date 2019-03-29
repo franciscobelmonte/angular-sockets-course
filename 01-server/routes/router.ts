@@ -11,12 +11,15 @@ router.get('/messages', (req: Request, res: Response) => {
 });
 
 router.post('/messages', (req: Request, res: Response) => {
-    const body = req.body.body;
+    const message = req.body.message;
     const from = req.body.from;
+
+    const server = Server.instance;
+    server.io.emit('new-message', {from, message});
 
     res.json({
         error: false,
-        body,
+        message,
         from
     });
 });
@@ -30,7 +33,7 @@ router.post('/messages/:id', (req: Request, res: Response) => {
     const payload = {
         from,
         message
-    }
+    };
 
     const server = Server.instance;
     server.io.in(id).emit('private-message', payload);

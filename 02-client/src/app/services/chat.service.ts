@@ -10,7 +10,7 @@ export class ChatService {
 
   sendMessage (message: string) {
     const payload = {
-      from: 'Francisco',
+      from: this.wsService.getUser().name,
       message: message
     };
 

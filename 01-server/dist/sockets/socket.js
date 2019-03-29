@@ -5,3 +5,8 @@ exports.disconnect = (client) => {
         console.log('Client disconnected');
     });
 };
+exports.message = (client) => {
+    client.on('message', (payload) => {
+        console.log('Message received', payload);
+    });
+};

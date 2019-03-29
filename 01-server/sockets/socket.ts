@@ -5,3 +5,9 @@ export const disconnect = (client: Socket) => {
         console.log('Client disconnected');
     });
 };
+
+export const message = (client: Socket) => {
+    client.on('message', (payload: {from: string, message: string}) => {
+        console.log('Message received', payload);
+    });
+};

@@ -13,3 +13,13 @@ export const message = (client: Socket, io: socketIO.Server) => {
         io.emit('new-message', payload);
     });
 };
+
+export const configureUser = (client: Socket, io: socketIO.Server) => {
+    client.on('configure-user', (payload: {name: string}, callback: Function) => {
+        console.log('Configuring user', payload.name);
+        callback({
+            ok: true,
+            message: `User ${payload.name} configured`
+        });
+    });
+};

@@ -30,4 +30,10 @@ export class WebsocketService {
   listen (event: string) {
     return this.socket.fromEvent(event);
   }
+
+  login (name) {
+    this.emit('configure-user', {name}, (response) => {
+      console.log(response);
+    });
+  }
 }

@@ -44,6 +44,10 @@ export class WebsocketService {
     });
   }
 
+  getUser() {
+    return this.user;
+  }
+
   saveUserInStorage() {
     localStorage.setItem('user', JSON.stringify(this.user));
   }

@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const server_1 = __importDefault(require("../classes/server"));
 const socket_1 = require("../sockets/socket");
+const chart_1 = require("../classes/chart");
 const router = express_1.Router();
+const chart = new chart_1.ChartData();
 router.get('/messages', (req, res) => {
     res.json({
         error: false,
@@ -60,6 +62,23 @@ router.get('/users/details', (req, res) => {
     res.json({
         error: false,
         clients: socket_1.connectedUsers.getList()
+    });
+});
+router.get('/chart', (req, res) => {
+    res.json({
+        error: false,
+        chart: chart.getChartData()
+    });
+});
+router.post('/chart', (req, res) => {
+    const month = req.body.month;
+    const value = Number(req.body.value);
+    chart.incrementValue(month, value);
+    const server = server_1.default.instance;
+    server.io.emit('change-data', chart.getChartData());
+    res.json({
+        error: false,
+        chart: chart.getChartData()
     });
 });
 exports.default = router;

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { WebsocketService } from '../../services/websocket.service';
 
 @Component({
   selector: 'app-chart',
@@ -11,20 +13,23 @@ export class ChartComponent implements OnInit {
   ];
   public lineChartLabels: Label[] = ['January', 'February', 'March', 'April'];
 
-  constructor() { }
+  constructor(public http: HttpClient, public wsService: WebsocketService) { }
 
   ngOnInit() {
-    setInterval(() => {
-      const newData = [
-        Math.round(Math.random() * 100),
-        Math.round(Math.random() * 100),
-        Math.round(Math.random() * 100),
-        Math.round(Math.random() * 100)
-      ];
-      this.lineChartData = [
-        { data: newData, label: 'Viewings' }
-      ];
-    }, 3000);
+    this.getData();
+    this.listenSocket();
+  }
+
+  getData() {
+    this.http.get('http://localhost:5000/chart').subscribe(response => {
+      this.lineChartData = response.chart;
+    });
+  }
+
+  listenSocket() {
+    this.wsService.listen('change-data').subscribe(response => {
+      this.lineCharData = response.chart;
+    })
   }
 
 }

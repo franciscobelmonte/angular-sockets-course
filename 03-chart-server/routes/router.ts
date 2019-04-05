@@ -2,8 +2,10 @@ import { Router, Request, Response } from 'express';
 import Server from '../classes/server';
 import { Socket } from 'socket.io';
 import { connectedUsers } from '../sockets/socket';
+import { ChartData } from '../classes/chart';
 
 const router = Router();
+const chart = new ChartData();
 
 router.get('/messages', (req: Request, res: Response) => {
     res.json({
@@ -69,6 +71,30 @@ router.get('/users/details', (req: Request, res: Response) => {
     res.json({
         error: false,
         clients: connectedUsers.getList()
+    });
+
+});
+
+router.get('/chart', (req: Request, res: Response) => {
+    res.json({
+        error: false,
+        chart: chart.getChartData()
+    });
+
+});
+
+router.post('/chart', (req: Request, res: Response) => {
+    const month = req.body.month;
+    const value = Number(req.body.value);
+
+    chart.incrementValue(month, value);
+
+    const server = Server.instance;
+    server.io.emit('change-data', chart.getChartData());
+
+    res.json({
+        error: false,
+        chart: chart.getChartData()
     });
 
 });

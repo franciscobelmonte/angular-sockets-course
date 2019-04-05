@@ -5,6 +5,7 @@ import { ChartsModule } from 'ng2-charts';
 
 
 import { AppComponent } from './app.component';
+import { ChartComponent } from './components/chart/chart.component';
 
 const config: SocketIoConfig = {
   url: 'http://localhost:5000',
@@ -13,7 +14,8 @@ const config: SocketIoConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,

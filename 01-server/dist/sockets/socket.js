@@ -31,3 +31,9 @@ exports.configureUser = (client, io) => {
         });
     });
 };
+exports.getUsers = (client, io) => {
+    client.on('get-users', () => {
+        console.log('Get all connected users');
+        io.to(client.id).emit('connected-users', exports.connectedUsers.getList());
+    });
+};

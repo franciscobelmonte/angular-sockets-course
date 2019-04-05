@@ -13,7 +13,7 @@ export class ListUsersComponent implements OnInit {
   constructor(public chatService: ChatService) { }
 
   ngOnInit() {
-    this.connectedUsers$ = this.chatService.connectedUsers();
+    this.connectedUsers$ = this.chatService.listenConnectedUsers();
   }
 
 }

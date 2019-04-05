@@ -39,6 +39,7 @@ export default class Server{
             socket.connectClient(client, this.io);
             socket.message(client, this.io);
             socket.configureUser(client, this.io);
+            socket.getUsers(client, this.io);
             socket.disconnect(client, this.io);
         });
     }

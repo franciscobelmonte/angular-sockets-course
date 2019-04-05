@@ -36,3 +36,11 @@ export const configureUser = (client: Socket, io: socketIO.Server) => {
         });
     });
 };
+
+export const getUsers = (client: Socket, io: socketIO.Server) => {
+    client.on('get-users', () => {
+        console.log('Get all connected users');
+        
+        io.to(client.id).emit('connected-users', connectedUsers.getList());
+    });
+};

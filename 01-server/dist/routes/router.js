@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const server_1 = __importDefault(require("../classes/server"));
+const socket_1 = require("../sockets/socket");
 const router = express_1.Router();
 router.get('/messages', (req, res) => {
     res.json({
@@ -38,6 +39,27 @@ router.post('/messages/:id', (req, res) => {
         id,
         message,
         from
+    });
+});
+router.get('/users', (req, res) => {
+    const server = server_1.default.instance;
+    server.io.clients((err, clients) => {
+        if (err) {
+            res.json({
+                error: true,
+                err
+            });
+        }
+        res.json({
+            error: false,
+            clients
+        });
+    });
+});
+router.get('/users/details', (req, res) => {
+    res.json({
+        error: false,
+        clients: socket_1.connectedUsers.getList()
     });
 });
 exports.default = router;

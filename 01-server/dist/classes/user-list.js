@@ -16,7 +16,7 @@ class UserList {
         }
     }
     getList() {
-        return this.list;
+        return this.list.filter(user => user.name !== 'without-name');
     }
     getUser(id) {
         return this.list.find((user) => user.id === id);

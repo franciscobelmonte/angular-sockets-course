@@ -33,10 +33,10 @@ class Server {
         console.log('Listening sockets...');
         this.io.on('connection', client => {
             console.log('Client connected');
-            socket.connectClient(client);
+            socket.connectClient(client, this.io);
             socket.message(client, this.io);
             socket.configureUser(client, this.io);
-            socket.disconnect(client);
+            socket.disconnect(client, this.io);
         });
     }
 }

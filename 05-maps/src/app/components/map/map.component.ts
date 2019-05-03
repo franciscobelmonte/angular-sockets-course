@@ -31,8 +31,15 @@ export class MapComponent implements OnInit {
       this.addMarker(marker);
     });
 
+    this.wsService.listen('delete-marker').subscribe((id: string) => {
+      for (const marker of this.markers) {
+        if (marker.getTitle() === id) {
+          marker.setMap(null);
+        }
+      }
+    });
+
     // move-marker
-    // delete-marker
   }
 
   loadMap () {
@@ -79,6 +86,7 @@ export class MapComponent implements OnInit {
       marker.setMap(null);
 
       // Emit socket event to delete marker
+      this.wsService.emit('delete-marker', place.id);
     });
 
     google.maps.event.addDomListener(marker, 'drag', (coors) => {

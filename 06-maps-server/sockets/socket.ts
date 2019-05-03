@@ -54,3 +54,12 @@ export const newMarker = (client: Socket, io: socketIO.Server) => {
         client.broadcast.emit('new-marker', marker);
     });
 };
+
+export const deleteMarker = (client: Socket, io: socketIO.Server) => {
+    client.on('delete-marker', (id) => {
+        console.log('Delete marker', id);
+        map.deleteMarker(id);
+
+        client.broadcast.emit('delete-marker', id);
+    });
+};

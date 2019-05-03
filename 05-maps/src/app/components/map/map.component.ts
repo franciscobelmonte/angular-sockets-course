@@ -39,7 +39,14 @@ export class MapComponent implements OnInit {
       }
     });
 
-    // move-marker
+    this.wsService.listen('move-marker').subscribe((marker: Place) => {
+      for (const markerToMove of this.markers) {
+        if (markerToMove.getTitle() === marker.id) {
+          const coordinates = new google.maps.LatLng(marker.lat, marker.lng);
+          markerToMove.setPosition(coordinates);
+        }
+      }
+    });
   }
 
   loadMap () {
@@ -98,6 +105,7 @@ export class MapComponent implements OnInit {
       };
 
       // Emit socket event to move marker
+      this.wsService.emit('move-marker', newMarker);
     });
 
     const body = `<b>${place.name}</b>`;

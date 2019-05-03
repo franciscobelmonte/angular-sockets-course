@@ -52,3 +52,10 @@ exports.deleteMarker = (client, io) => {
         client.broadcast.emit('delete-marker', id);
     });
 };
+exports.moveMarker = (client, io) => {
+    client.on('move-marker', (marker) => {
+        console.log('Move marker', marker);
+        router_1.map.moveMarker(marker);
+        client.broadcast.emit('move-marker', marker);
+    });
+};

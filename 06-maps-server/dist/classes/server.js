@@ -39,6 +39,7 @@ class Server {
             socket.getUsers(client, this.io);
             socket.newMarker(client, this.io);
             socket.deleteMarker(client, this.io);
+            socket.moveMarker(client, this.io);
             socket.disconnect(client, this.io);
         });
     }

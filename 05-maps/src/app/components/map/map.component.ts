@@ -34,6 +34,13 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     this.loadMap();
+    this.listenSockets();
+  }
+
+  listenSockets() {
+    // new-marker
+    // move-marker
+    // delete-marker
   }
 
   loadMap () {

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Place } from '../../models/place';
 import { HttpClient } from '@angular/common/http';
+import { WebsocketService } from '../../services/websocket.service';
 
 @Component({
   selector: 'app-map',
@@ -15,7 +16,7 @@ export class MapComponent implements OnInit {
 
   places: Place[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public wsService: WebsocketService) { }
 
   ngOnInit() {
     this.http.get('http://localhost:5000/map').subscribe((places: Place[]) => {
@@ -26,7 +27,10 @@ export class MapComponent implements OnInit {
   }
 
   listenSockets() {
-    // new-marker
+    this.wsService.listen('new-marker').subscribe((marker: Place) => {
+      this.addMarker(marker);
+    });
+
     // move-marker
     // delete-marker
   }
@@ -52,6 +56,7 @@ export class MapComponent implements OnInit {
       this.addMarker(newPlace);
 
       // Emit socket event add marker
+      this.wsService.emit('new-marker', newPlace);
     });
 
     for (const place of this.places) {
@@ -95,8 +100,6 @@ export class MapComponent implements OnInit {
     google.maps.event.addDomListener(marker, 'click', (coors) => {
       this.infoWindows.forEach(infoWindow => infoWindow.close());
       infoWindow.open(this.map, marker);
-
-      // Emit socket event to move marker
     });
 
     this.infoWindows.push(infoWindow);

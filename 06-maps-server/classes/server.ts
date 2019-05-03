@@ -40,6 +40,7 @@ export default class Server{
             socket.message(client, this.io);
             socket.configureUser(client, this.io);
             socket.getUsers(client, this.io);
+            socket.newMarker(client, this.io);
             socket.disconnect(client, this.io);
         });
     }

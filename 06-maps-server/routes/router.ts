@@ -100,7 +100,7 @@ router.post('/chart', (req: Request, res: Response) => {
 
 });
 
-const map = new Map();
+export const map = new Map();
 
 const places = [
     {

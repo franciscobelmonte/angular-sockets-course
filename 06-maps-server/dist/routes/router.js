@@ -82,7 +82,7 @@ router.post('/chart', (req, res) => {
         chart: chart.getChartData()
     });
 });
-const map = new map_1.Map();
+exports.map = new map_1.Map();
 const places = [
     {
         id: '1',
@@ -103,8 +103,8 @@ const places = [
         lng: -122.401745
     }
 ];
-map.markers.push(...places);
+exports.map.markers.push(...places);
 router.get('/map', (req, res) => {
-    res.json(map.getMarkers());
+    res.json(exports.map.getMarkers());
 });
 exports.default = router;

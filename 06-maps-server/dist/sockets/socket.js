@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_list_1 = require("../classes/user-list");
 const user_1 = require("../classes/user");
+const router_1 = require("../routes/router");
 exports.connectedUsers = new user_list_1.UserList();
 exports.connectClient = (client, io) => {
     const user = new user_1.User(client.id);
@@ -35,5 +36,12 @@ exports.getUsers = (client, io) => {
     client.on('get-users', () => {
         console.log('Get all connected users');
         io.to(client.id).emit('connected-users', exports.connectedUsers.getList());
+    });
+};
+exports.newMarker = (client, io) => {
+    client.on('new-marker', (marker) => {
+        console.log('New marker', marker);
+        router_1.map.addMarker(marker);
+        client.broadcast.emit('new-marker', marker);
     });
 };

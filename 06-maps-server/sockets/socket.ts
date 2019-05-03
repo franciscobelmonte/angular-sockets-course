@@ -2,6 +2,7 @@ import { Socket } from 'socket.io';
 import socketIO from 'socket.io';
 import { UserList } from '../classes/user-list';
 import { User } from '../classes/user';
+import { map } from '../routes/router';
 
 export const connectedUsers = new UserList();
 
@@ -42,5 +43,14 @@ export const getUsers = (client: Socket, io: socketIO.Server) => {
         console.log('Get all connected users');
         
         io.to(client.id).emit('connected-users', connectedUsers.getList());
+    });
+};
+
+export const newMarker = (client: Socket, io: socketIO.Server) => {
+    client.on('new-marker', (marker) => {
+        console.log('New marker', marker);
+        map.addMarker(marker);
+
+        client.broadcast.emit('new-marker', marker);
     });
 };

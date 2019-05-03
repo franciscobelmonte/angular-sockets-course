@@ -7,6 +7,7 @@ const express_1 = require("express");
 const server_1 = __importDefault(require("../classes/server"));
 const socket_1 = require("../sockets/socket");
 const chart_1 = require("../classes/chart");
+const map_1 = require("../classes/map");
 const router = express_1.Router();
 const chart = new chart_1.ChartData();
 router.get('/messages', (req, res) => {
@@ -80,5 +81,30 @@ router.post('/chart', (req, res) => {
         error: false,
         chart: chart.getChartData()
     });
+});
+const map = new map_1.Map();
+const places = [
+    {
+        id: '1',
+        name: 'Udemy',
+        lat: 37.784679,
+        lng: -122.395936
+    },
+    {
+        id: '2',
+        name: 'Bahía de San Francisco',
+        lat: 37.798933,
+        lng: -122.377732
+    },
+    {
+        id: '3',
+        name: 'The Palace Hotel',
+        lat: 37.788578,
+        lng: -122.401745
+    }
+];
+map.markers.push(...places);
+router.get('/map', (req, res) => {
+    res.json(map.getMarkers());
 });
 exports.default = router;

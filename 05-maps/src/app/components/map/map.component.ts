@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Place } from '../../models/place';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-map',
@@ -12,29 +13,16 @@ export class MapComponent implements OnInit {
   markers: google.maps.Marker[] = [];
   infoWindows: google.maps.InfoWindow[] = [];
 
-  places: Place[] = [
-    {
-      name: 'Udemy',
-      lat: 37.784679,
-      lng: -122.395936
-    },
-    {
-      name: 'Bahía de San Francisco',
-      lat: 37.798933,
-      lng: -122.377732
-    },
-    {
-      name: 'The Palace Hotel',
-      lat: 37.788578,
-      lng: -122.401745
-    }
-  ];
+  places: Place[] = [];
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.loadMap();
-    this.listenSockets();
+    this.http.get('http://localhost:5000/map').subscribe((places: Place[]) => {
+      this.places = places;
+      this.loadMap();
+      this.listenSockets();
+    });
   }
 
   listenSockets() {
@@ -78,7 +66,8 @@ export class MapComponent implements OnInit {
       map: this.map,
       animation: google.maps.Animation.DROP,
       position: coordinates,
-      draggable: true
+      draggable: true,
+      title: place.id
     });
 
     google.maps.event.addDomListener(marker, 'dblclick', (coors) => {
@@ -91,7 +80,8 @@ export class MapComponent implements OnInit {
       const newMarker = {
         lat: coors.latLng.lat(),
         lng: coors.latLng.lng(),
-        name: place.name
+        name: place.name,
+        id: marker.getTitle(),
       };
 
       // Emit socket event to move marker

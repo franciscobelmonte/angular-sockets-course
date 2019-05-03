@@ -10,6 +10,7 @@ export class MapComponent implements OnInit {
   @ViewChild('map') mapElement: ElementRef;
   map: google.maps.Map;
   markers: google.maps.Marker[] = [];
+  infoWindows: google.maps.InfoWindow[] = [];
 
   places: Place[] = [
     {
@@ -59,6 +60,36 @@ export class MapComponent implements OnInit {
       position: coordinates,
       draggable: true
     });
+
+    google.maps.event.addDomListener(marker, 'dblclick', (coors) => {
+      marker.setMap(null);
+
+      // Emit socket event to delete marker
+    });
+
+    google.maps.event.addDomListener(marker, 'drag', (coors) => {
+      const newMarker = {
+        lat: coors.latLng.lat(),
+        lng: coors.latLng.lng(),
+        name: place.name
+      };
+
+      // Emit socket event to move marker
+    });
+
+    const body = `<b>${place.name}</b>`;
+    const infoWindow = new google.maps.InfoWindow({
+      content: body
+    });
+
+    google.maps.event.addDomListener(marker, 'click', (coors) => {
+      this.infoWindows.forEach(infoWindow => infoWindow.close());
+      infoWindow.open(this.map, marker);
+
+      // Emit socket event to move marker
+    });
+
+    this.infoWindows.push(infoWindow);
 
     this.markers.push(marker);
   }

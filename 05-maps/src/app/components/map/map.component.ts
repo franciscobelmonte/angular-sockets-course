@@ -46,6 +46,19 @@ export class MapComponent implements OnInit {
 
     this.map = new google.maps.Map(this.mapElement.nativeElement, options);
 
+    this.map.addListener('click', (coors) => {
+      const newPlace: Place = {
+        id: new Date().toISOString(),
+        name: 'New place',
+        lat: coors.latLng.lat(),
+        lng: coors.latLng.lng()
+      };
+
+      this.addMarker(newPlace);
+
+      // Emit socket event add marker
+    });
+
     for (const place of this.places) {
       this.addMarker(place);
     }
